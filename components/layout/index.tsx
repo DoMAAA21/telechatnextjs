@@ -1,17 +1,11 @@
-import { ReactNode, useState } from 'react';
+import React, { ReactNode, ComponentType } from 'react';
 import Head from 'next/head';
 
 interface LayoutProps {
     children: ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div className="min-h-screen flex">
             <div className="flex-1 flex flex-col">
@@ -20,21 +14,21 @@ const Layout = ({ children }: LayoutProps) => {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
 
-                <header className="bg-white text-white py-8 px-6">
-                    <button
-                        className="block sm:hidden"
-                        onClick={toggleSidebar}
-                        aria-label={isSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
-                    >
-                        {isSidebarOpen ? 'Close' : 'Open'} Sidebar
-                    </button>
-                </header>
-
-                <main className="flex-1 p-6 bg-gray-200">{children}</main>
-
+                <header className="bg-white text-white py-8 px-6" />
+                <main className="flex-1 p-6 bg-[#ebf0f7]">{children}</main>
             </div>
         </div>
     );
 };
 
-export default Layout;
+const withLayout = <P extends React.JSX.IntrinsicAttributes>(Component: ComponentType<P>): React.FC<P> => {
+    return function WrappedComponent(props: P): React.ReactElement {
+        return (
+            <Layout>
+                <Component {...props} />
+            </Layout>
+        );
+    };
+}
+
+export default withLayout;
