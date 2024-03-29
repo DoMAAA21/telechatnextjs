@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/auth';
+import { errorMsg } from '@/components/layout/toast';
 
 interface LoginFormProps {
     onSuccess: () => void;
@@ -16,8 +17,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const { register, handleSubmit } = useForm<FormData>();
     const { mutate: submitLogin, isPending, error } = useMutation({ mutationFn: login });
 
-    if(error){
-        alert(error);
+    if (error) {
+        errorMsg(error);
     }
 
     const handleFormSubmit = async (data: FormData) => {
