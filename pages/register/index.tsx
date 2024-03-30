@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import RegisterForm from './registerForm';
 import Head from '@/components/Head';
-const RegiserPage: React.FC = () => {
+import { useAuth } from '@/context/authContext';
+import { useRouter } from 'next/router';
 
-    const onSuccess = async () => {
-        console.log('asd');
+interface User {
+    username: string;
+    email: string;
+    password: string;
+    fname: string;
+    lname: string;
+    number: string;
+}
+const RegiserPage: React.FC = () => {
+    const router = useRouter();
+    const { login, isAuthenticated } = useAuth();
+
+    useEffect(()=>{
+        if(isAuthenticated){
+            router.push('/')
+        }
+    })
+    const onSuccess = async (data: User) => {
+        login(data)
     };
 
     return (

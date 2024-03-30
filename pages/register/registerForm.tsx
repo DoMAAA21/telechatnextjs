@@ -4,8 +4,18 @@ import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/auth';
 import { errorMsg } from '@/components/toast';
 
+
+interface User {
+    username: string;
+    email: string;
+    password: string;
+    fname: string;
+    lname: string;
+    number: string;
+}
+
 interface RegisterFormProps {
-    onSuccess: () => void;
+    onSuccess: (data: User) => void;
 }
 
 interface NewUser {
@@ -18,13 +28,13 @@ interface NewUser {
 }
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<NewUser>();
-    const { mutate: submitRegister, isPending, error, reset } = useMutation({
+    const { mutate: submitRegister, isPending, error, reset, data } = useMutation({
         mutationFn: registerUser,
         onError: (error) => {
             errorMsg(error)
         },
         onSuccess: () => {
-            onSuccess();
+            onSuccess(data);
         },
         onSettled: () => {
             reset();
