@@ -28,7 +28,7 @@ interface NewUser {
 }
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<NewUser>();
-    const { mutate: submitRegister, isPending, error, reset, data } = useMutation({
+    const { mutate: submitRegister, isPending, reset, data } = useMutation({
         mutationFn: registerUser,
         onError: (error) => {
             errorMsg(error)
@@ -40,10 +40,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             reset();
         }
     });
-
-    if (error) {
-        errorMsg(error);
-    }
 
     const handleFormSubmit = async (data: NewUser) => {
         try {
