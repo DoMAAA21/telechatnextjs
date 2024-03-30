@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/auth';
-import { errorMsg } from '@/components/layout/toast';
+import { errorMsg } from '@/components/toast';
 
 interface LoginFormProps {
     onSuccess: () => void;
