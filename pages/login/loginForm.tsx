@@ -5,28 +5,34 @@ import { login } from '@/api/auth';
 import { errorMsg } from '@/components/toast';
 
 interface LoginFormProps {
-    onSuccess: () => void;
+    onSuccess: (data: FormData) => void;
 }
 
 interface FormData {
-    username: string;
+    email: string;
     password: string;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const { register, handleSubmit } = useForm<FormData>();
-    const { mutate: submitLogin, isPending, error } = useMutation({ mutationFn: login });
+    const { mutate: submitLogin, isPending, reset, data } = useMutation({
+        mutationFn: login,
+        onError: (error) => {
+            errorMsg(error)
+        },
+        onSuccess: () => {
+            onSuccess(data);
+        },
+        onSettled: () => {
+            reset();
+        }
+    });
 
-    if (error) {
-        errorMsg(error);
-    }
 
     const handleFormSubmit = async (data: FormData) => {
         try {
-            await submitLogin(data);
-            onSuccess();
+            submitLogin(data);
         } catch (error) {
-
             console.error('Login failed:', error);
         }
     };
@@ -34,15 +40,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     return (
         <form onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                    Username
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                    Email
                 </label>
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
+                    id="email"
                     type="text"
-                    placeholder="Enter your username"
-                    {...register('username', { required: true })}
+                    placeholder="Enter your email"
+                    {...register('email', { required: true })}
                 />
             </div>
             <div className="mb-6">

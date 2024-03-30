@@ -8,11 +8,21 @@ interface NewUser {
     lname: string;
     number: string;
 }
-export const login = async (credentials: { username: string; password: string }) => {
+export const login = async (credentials: { email: string; password: string }) => {
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, credentials);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        };
+
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/login`, credentials, config);
         return response.data;
     } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data?.message || 'An error occured';
+        }
         throw new Error('Login failed');
     }
 };
@@ -23,13 +33,13 @@ export const registerUser = async (NewUserData: NewUser) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            withCredentials: true
         }
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/register`, NewUserData, config);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.log(error.response)
             throw error.response?.data?.message || 'An error occured';
         }
         throw new Error('Register failed');

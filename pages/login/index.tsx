@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LoginForm from './loginForm';
+import { useAuth } from '@/context/authContext';
+import { useRouter } from 'next/router';
+interface User {
+    email: string;
+    password: string;
+}
 
 const LoginPage: React.FC = () => {
-    
-    const onSuccess = async () => {
-        console.log('asd');
+    const router = useRouter();
+    const { login, isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/')
+        }
+    })
+    const onSuccess = async (data: User) => {
+        login(data);
     };
 
     return (
