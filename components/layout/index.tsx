@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </Head>
 
                 <header className="bg-white text-white py-8 px-6" />
-                <main className="flex-1 p-6 bg-[#ebf0f7]">{children}</main>
+                <main className="flex-1 p-6 bg-[#e4ebf5]">{children}</main>
             </div>
         </div>
     );
