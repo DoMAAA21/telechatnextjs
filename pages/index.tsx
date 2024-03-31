@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import Layout from "@/components/layout";
 import { useAuth } from "@/context/authContext";
-
 import { useRouter } from "next/router";
 
 const Home = () => {
