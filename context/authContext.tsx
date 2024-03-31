@@ -1,8 +1,5 @@
-"use client"
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { createContext, useContext, useState } from 'react';
-import jsonwebtoken from "jsonwebtoken";
-import { getCookie } from 'cookies-next';
 
 interface User {
   email: string;
@@ -28,29 +25,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = getCookie('token');
-    console.log(document.cookie);
-    console.log(token)
-    if (token) {
-      try {
-        const decodedToken = jsonwebtoken.decode(token);
-        setUser(decodedToken);
-        setIsAuthenticated(true);
-      } catch (error) {
-        // Handle invalid token
-        console.error('Invalid token:', error);
-      }
+    const storedAuth = localStorage.getItem('auth');
+    if (storedAuth) {
+      const parsedAuth = storedAuth && JSON.parse(storedAuth);
+      setIsAuthenticated(true);
+      setUser(parsedAuth);
     }
   }, []);
 
   const login = (credentials: User) => {
     setIsAuthenticated(true);
     setUser(credentials);
+    localStorage.setItem('auth', JSON.stringify(credentials));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
+    localStorage.removeItem('auth');
   };
 
   return (

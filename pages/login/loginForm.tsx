@@ -15,19 +15,18 @@ interface FormData {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const { register, handleSubmit } = useForm<FormData>();
-    const { mutate: submitLogin, isPending, reset, data } = useMutation({
+    const { mutate: submitLogin, isPending, reset } = useMutation({
         mutationFn: login,
         onError: (error) => {
             errorMsg(error)
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             onSuccess(data);
         },
         onSettled: () => {
             reset();
         }
     });
-
 
     const handleFormSubmit = async (data: FormData) => {
         try {
